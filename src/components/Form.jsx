@@ -5,7 +5,7 @@ const Form = ({ submitData }) => {
   const [employeeId, setEmployeeId] = useState('');
   const [levelUrgency, setLevelUrgency] = useState('');
   const [timeRepair, setTimeRepair] = useState(0);
-  const [image, setImage] = useState(null);
+  const [image, setImage] = useState({ preview: '', raw: '' });
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -35,14 +35,17 @@ const Form = ({ submitData }) => {
     setEmployeeId('');
     setLevelUrgency('');
     setTimeRepair(0);
-    setImage(null);
+    setImage({ preview: '', raw: '' });
 
     submitData({ defect, employeeId, levelUrgency, timeRepair, image });
   };
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImage(URL.createObjectURL(e.target.files[0]));
+      setImage({
+        preview: URL.createObjectURL(e.target.files[0]),
+        raw: e.target.files[0]
+      });
     }
   };
   return (
@@ -105,7 +108,7 @@ const Form = ({ submitData }) => {
                 id='image'
                 onChange={onImageChange}
               ></input>
-              <img src={image} width='300' height='300' />
+              <img src={image.preview} width='300' height='300' />
             </div>
             <button className='btn btn-primary m-1 btn-lg' onClick={onSubmit}>
               Submit Report

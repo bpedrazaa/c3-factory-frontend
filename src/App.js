@@ -45,12 +45,25 @@ function App() {
     timeRepair,
     image
   }) => {
+    const formData = new FormData();
+    formData.append('image', image.raw);
+
+    // await fetch("YOUR_URL", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "multipart/form-data"
+    //   },
+    //   body: formData
+    // });
+
     console.log('Submit Data Button Clicked');
     console.log(defect);
     console.log(employeeId);
     console.log(levelUrgency);
     console.log(timeRepair);
-    console.log(image);
+    console.log(image.preview);
+    console.log(formData);
+    console.log({ image: image.raw });
     // Make the POST request
   };
 
