@@ -1,9 +1,50 @@
+import { useState } from 'react';
+
 const Form = ({ submitData }) => {
+  const [defect, setDefect] = useState('');
+  const [employeeId, setEmployeeId] = useState('');
+  const [levelUrgency, setLevelUrgency] = useState('');
+  const [timeRepair, setTimeRepair] = useState(0);
+  const [image, setImage] = useState(null);
+
   const onSubmit = (e) => {
     e.preventDefault();
-    submitData();
+
+    if (!defect) {
+      alert('Please add the defect found');
+      return;
+    }
+    if (!employeeId) {
+      alert('Please add the ID of the employee who found the defect');
+      return;
+    }
+    if (!levelUrgency) {
+      alert('Please select the level of urgency');
+      return;
+    }
+    if (timeRepair < 1) {
+      alert('Please specify the time of repair of the defect');
+      return;
+    }
+    if (!image) {
+      alert('Please upload the image of the defect');
+      return;
+    }
+
+    setDefect('');
+    setEmployeeId('');
+    setLevelUrgency('');
+    setTimeRepair(0);
+    setImage(null);
+
+    submitData({ defect, employeeId, levelUrgency, timeRepair, image });
   };
 
+  const onImageChange = (e) => {
+    if (e.target.files && e.target.files[0]) {
+      setImage(URL.createObjectURL(e.target.files[0]));
+    }
+  };
   return (
     <div>
       <div className='alert alert-info' role='alert'>
@@ -15,35 +56,56 @@ const Form = ({ submitData }) => {
           <form>
             <div className='form-group m-1 mb-4'>
               <label>DEFECT NAME</label>
-              <textarea
+              <input
                 className='form-control'
                 id='defect'
-                rows='1'
-              ></textarea>
+                value={defect}
+                onChange={(e) => setDefect(e.target.value)}
+              ></input>
             </div>
             <div className='form-group m-1 mb-4'>
               <label>EMPLOYEE ID</label>
-              <textarea
+              <input
                 className='form-control'
                 id='employee-id'
-                rows='1'
-              ></textarea>
+                value={employeeId}
+                onChange={(e) => setEmployeeId(e.target.value)}
+              ></input>
             </div>
             <div className='form-group m-1 mb-4'>
               <label>LEVEL OF URGENCY</label>
-              <select className='form-control' id='level-urgency'>
+              <select
+                className='form-control'
+                id='level-urgency'
+                onChange={(e) => setLevelUrgency(e.target.value)}
+                value={levelUrgency}
+              >
+                <option></option>
                 <option>High</option>
                 <option>Medium</option>
                 <option>Low</option>
               </select>
             </div>
+            <div className='form-outline m-1 mb-4'>
+              <label>TIME OF REPAIR</label>
+              <input
+                type='number'
+                className='form-control'
+                id='time-repair'
+                value={timeRepair}
+                onChange={(e) => setTimeRepair(e.target.value)}
+              ></input>
+            </div>
+
             <div className='form-group m-1 mb-4'>
-              <label>IMAGE OF THE DEFECT </label> <br />
+              <label>IMAGE OF THE DEFECT</label> <br />
               <input
                 type='file'
                 className='form-control-file'
-                id='exampleFormControlFile1'
+                id='image'
+                onChange={onImageChange}
               ></input>
+              <img src={image} width='300' height='300' />
             </div>
             <button className='btn btn-primary m-1 btn-lg' onClick={onSubmit}>
               Submit Report

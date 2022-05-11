@@ -38,8 +38,19 @@ function App() {
     setData(totalData);
   };
 
-  const submitData = async () => {
+  const submitData = async ({
+    defect,
+    employeeId,
+    levelUrgency,
+    timeRepair,
+    image
+  }) => {
     console.log('Submit Data Button Clicked');
+    console.log(defect);
+    console.log(employeeId);
+    console.log(levelUrgency);
+    console.log(timeRepair);
+    console.log(image);
     // Make the POST request
   };
 
