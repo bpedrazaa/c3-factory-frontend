@@ -50,7 +50,7 @@ const Form = ({ submitData }) => {
   };
   return (
     <div>
-      <div className='alert alert-info' role='alert'>
+      <div className='alert alert-warning' role='alert'>
         DEFECT REPORT
       </div>
 

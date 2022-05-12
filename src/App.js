@@ -10,32 +10,11 @@ function App() {
   const loadData = async () => {
     const { REACT_APP_BACKEND_API } = process.env;
     const url = REACT_APP_BACKEND_API;
-    console.log(url);
 
     const res = await fetch(url);
-    const data = await res.json();
-    console.log(data);
+    const fetchedData = await res.json();
 
-    const results = data.results;
-    let totalData = [];
-    // Iterate over the results
-    results.forEach((result) => {
-      let cleanData = null;
-      cleanData = {
-        imageCover: result.artworkUrl100,
-        songName: result.trackName,
-        artistName: result.artistName,
-        albumName: result.collectionName,
-        time: result.trackTimeMillis / 1000,
-        price: result.trackPrice,
-        previewUrl: result.previewUrl,
-        trackId: result.trackId
-      };
-      // Create an array with the new results
-      totalData.push(cleanData);
-    });
-    // Update the State attribute songs
-    setData(totalData);
+    setData([...data, ...fetchedData]);
   };
 
   const submitData = async ({

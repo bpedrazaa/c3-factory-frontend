@@ -5,7 +5,7 @@ const Cards = ({ data }) => {
   return (
     <div>
       <div className='row'>
-        <div className='alert alert-info m-2' role='alert'>
+        <div className='alert alert-warning m-2' role='alert'>
           CURRENT DEFECTS
         </div>
 
@@ -14,7 +14,7 @@ const Cards = ({ data }) => {
           <div className='col'>
             <Card
               individualData={individualData}
-              key={individualData.trackId}
+              key={individualData.defectId}
             />
           </div>
         ))}
