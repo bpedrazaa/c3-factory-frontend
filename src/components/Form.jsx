@@ -1,11 +1,11 @@
 import { useState } from 'react';
 
-const Form = ({ submitData }) => {
+const Form = ({ submitData, hideForm }) => {
   const [defect, setDefect] = useState('');
-  const [employeeId, setEmployeeId] = useState('');
+  const [employeeId, setEmployeeId] = useState(0);
   const [levelUrgency, setLevelUrgency] = useState('');
   const [timeRepair, setTimeRepair] = useState(0);
-  const [image, setImage] = useState({ preview: '', raw: '' });
+  const [image, setImage] = useState('');
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -14,7 +14,7 @@ const Form = ({ submitData }) => {
       alert('Please add the defect found');
       return;
     }
-    if (!employeeId) {
+    if (employeeId < 1) {
       alert('Please add the ID of the employee who found the defect');
       return;
     }
@@ -35,19 +35,17 @@ const Form = ({ submitData }) => {
     setEmployeeId('');
     setLevelUrgency('');
     setTimeRepair(0);
-    setImage({ preview: '', raw: '' });
+    setImage('');
 
     submitData({ defect, employeeId, levelUrgency, timeRepair, image });
   };
 
   const onImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
-      setImage({
-        preview: URL.createObjectURL(e.target.files[0]),
-        raw: e.target.files[0]
-      });
+      setImage(URL.createObjectURL(e.target.files[0]));
     }
   };
+
   return (
     <div>
       <div className='alert alert-warning' role='alert'>
@@ -66,12 +64,12 @@ const Form = ({ submitData }) => {
                 onChange={(e) => setDefect(e.target.value)}
               ></input>
             </div>
-            <div className='form-group m-1 mb-4'>
+            <div className='form-outline m-1 mb-4'>
               <label>EMPLOYEE ID</label>
               <input
+                type='number'
                 className='form-control'
                 id='employee-id'
-                value={employeeId}
                 onChange={(e) => setEmployeeId(e.target.value)}
               ></input>
             </div>
@@ -95,7 +93,6 @@ const Form = ({ submitData }) => {
                 type='number'
                 className='form-control'
                 id='time-repair'
-                value={timeRepair}
                 onChange={(e) => setTimeRepair(e.target.value)}
               ></input>
             </div>
@@ -108,10 +105,13 @@ const Form = ({ submitData }) => {
                 id='image'
                 onChange={onImageChange}
               ></input>
-              <img src={image.preview} width='300' height='300' />
+              <img src={image} width='300' height='300' />
             </div>
             <button className='btn btn-primary m-1 btn-lg' onClick={onSubmit}>
               Submit Report
+            </button>
+            <button className='btn btn-danger m-1 btn-lg' onClick={hideForm}>
+              Hide Report
             </button>
           </form>
         </div>

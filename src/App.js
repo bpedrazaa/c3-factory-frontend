@@ -7,14 +7,14 @@ function App() {
   const [data, setData] = useState([]);
   const [viewForm, setViewForm] = useState(false);
 
-  const loadData = async () => {
-    const { REACT_APP_BACKEND_API } = process.env;
-    const url = REACT_APP_BACKEND_API;
+  const { REACT_APP_BACKEND_API } = process.env;
+  const url = REACT_APP_BACKEND_API;
 
+  const loadData = async () => {
     const res = await fetch(url);
     const fetchedData = await res.json();
 
-    setData([...data, ...fetchedData]);
+    setData(fetchedData);
   };
 
   const submitData = async ({
@@ -24,41 +24,41 @@ function App() {
     timeRepair,
     image
   }) => {
-    const formData = new FormData();
-    formData.append('image', image.raw);
+    const defectData = {
+      defect: defect,
+      employeeId: employeeId,
+      levelUrgency: levelUrgency,
+      timeRepair: timeRepair,
+      image: image
+    };
 
-    // await fetch("YOUR_URL", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "multipart/form-data"
-    //   },
-    //   body: formData
-    // });
-
-    console.log('Submit Data Button Clicked');
-    console.log(defect);
-    console.log(employeeId);
-    console.log(levelUrgency);
-    console.log(timeRepair);
-    console.log(image.preview);
-    console.log(formData);
-    console.log({ image: image.raw });
-    // Make the POST request
+    fetch(url, {
+      method: 'POST',
+      body: JSON.stringify(defectData),
+      headers: { 'Content-Type': 'application/json' }
+    }).then(function (response) {
+      return response.json();
+    });
   };
 
   useEffect(() => {
     loadData();
-    return () => {};
-  }, []);
+  }, [data]);
 
-  const toggleForm = () => {
-    setViewForm(!viewForm);
+  const toggleForm = (e) => {
+    e.preventDefault();
+    setViewForm(true);
+  };
+
+  const hideForm = (e) => {
+    e.preventDefault();
+    setViewForm(false);
   };
 
   return (
     <div className='App'>
       <Header toggleForm={toggleForm} />
-      {viewForm && <Form submitData={submitData} />}
+      {viewForm && <Form submitData={submitData} hideForm={hideForm} />}
       <Cards data={data} />;
     </div>
   );
